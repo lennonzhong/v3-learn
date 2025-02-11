@@ -15,13 +15,16 @@
       name: "zxl",
       age: 29
     }
-    const state1 = reactive(obj)
-    const state2 = reactive(obj)
-
-    console.log(state1, state1 === state2)
+    const state = reactive(obj)
 
     effect(() => {
-      app.innerHTML = `姓名： ${state.name}  年龄：${state.age}`
+      app.innerHTML = `姓名： ${state.name}`
+
+      effect(() => {
+        console.log(state.name)
+      })
+
+      console.log(state.age)
     })
 
     setTimeout(()=>{
