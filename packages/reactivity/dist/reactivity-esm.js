@@ -1,15 +1,17 @@
 // packages/reactivity/src/effect.ts
-var targetEffect;
 function effect(fn, options) {
   let __effect = new ReactiveEffect(fn, () => {
     __effect.run();
   });
   __effect.run();
 }
+var targetEffect;
 var ReactiveEffect = class {
   constructor(fn, scheduler) {
     this.fn = fn;
     this.scheduler = scheduler;
+    this.effectId = 0;
+    this.active = true;
   }
   run() {
     if (!this.active) {
@@ -29,10 +31,31 @@ var ReactiveEffect = class {
 var isObject = (value) => typeof value === "object" && value !== null;
 
 // packages/reactivity/src/reactiveEffect.ts
+function createDep(cleanup, name) {
+  let dep = /* @__PURE__ */ new Map();
+  dep.cleanup = cleanup;
+  dep.name = name;
+  return dep;
+}
+var targetMap = /* @__PURE__ */ new WeakMap();
 function track(target, key) {
   if (targetEffect) {
-    console.log(target, key, targetEffect);
+    let depMap = targetMap.get(target);
+    if (!depMap) {
+      targetMap.set(target, depMap = /* @__PURE__ */ new Map());
+    }
+    let deps = depMap.get(key);
+    if (!deps) {
+      depMap.set(key, deps = createDep(() => {
+        depMap.delete(key);
+      }, key));
+    }
+    trackDep(targetEffect, deps);
+    console.log(targetMap);
   }
+}
+function trackDep(effect2, deps) {
+  deps.set(effect2, effect2.effectId);
 }
 
 // packages/reactivity/src/baseHandler.ts

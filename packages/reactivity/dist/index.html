@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module">
-    import { reactive, effect } from "./reactivity-esm.js";
-    console.log(reactive)
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive, effect } from "./reactivity-esm.js"
 
-    let obj ={
-      name: "zxl",
-      age: 29
-    }
-    const state = reactive(obj)
-
-    effect(() => {
-      app.innerHTML = `姓名： ${state.name}`
+      let obj = {
+        name: "zxl",
+        age: 29,
+      }
+      const state = reactive(obj)
 
       effect(() => {
-        console.log(state.name)
+        app.innerHTML = `姓名： ${state.age} 年龄： ${state.name}`
       })
 
-      console.log(state.age)
-    })
-
-    setTimeout(()=>{
-      state.age++
-    },2000)
-  </script>
-</body>
+      setTimeout(() => {
+        state.age++
+      }, 2000)
+    </script>
+  </body>
 </html>

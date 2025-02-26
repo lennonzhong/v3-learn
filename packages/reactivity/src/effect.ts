@@ -1,5 +1,3 @@
-export let targetEffect;
-
 export function effect(fn, options?) {
   let __effect = new ReactiveEffect(fn, () => {
     __effect.run();
@@ -8,8 +6,10 @@ export function effect(fn, options?) {
   __effect.run();
 }
 
+export let targetEffect;
 class ReactiveEffect {
-  active: true
+  effectId = 0
+  active: Boolean = true
   constructor(public fn, public scheduler) { }
   run() {
     if (!this.active) {
